@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ImageBackground} from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
 import {
@@ -23,19 +23,43 @@ export default function App() {
     return <AppLoading />;
   }
 
-  const iconMinus = <AntDesign name="minuscircleo" size={24} color="black" />;
   const image = require('./resources/bg.jpg');
   
   return (
     
-    <View style={{flex:1}}>
-    <StatusBar></StatusBar>       
+  <ScrollView style={{flex:1}}>
+    <StatusBar hidden></StatusBar>   
+
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <View style={styles.coverView}><Text style={styles.textHeader}>Task List</Text></View>
-        
-    </ImageBackground>  
-     {iconMinus}
+    <View style={styles.coverView}><Text style={styles.textHeader}>Task List</Text></View>   
+    </ImageBackground> 
+
+    <View style={styles.tarefaSingle}>
+
+      <View style={{flex:1, width: '100%', paddingEnd:10}}>
+        <Text style={styles.textBody}> My first task 14/09 </Text>
+      </View>
+
+      <View>
+        <TouchableOpacity><AntDesign name="minuscircleo" size={24} color="black" /></TouchableOpacity>
+      </View>
+
     </View>
+
+    <View style={styles.tarefaSingle}>
+
+      <View style={{flex:1, width: '100%', paddingEnd:10}}>
+        <Text style={styles.textBody}> My first task 14/09 </Text>
+      </View>
+
+      <View>
+        <TouchableOpacity><AntDesign name="minuscircleo" size={24} color="black" /></TouchableOpacity>
+      </View>
+
+    </View>
+     
+  </ScrollView>
+
   );
 
 }
@@ -49,6 +73,7 @@ const styles = StyleSheet.create({
   
   textBody: {
     textAlign:'justify',
+    fontFamily:'BalsamiqSans_400Regular'
   },
 
   viewBody: {
@@ -67,6 +92,16 @@ const styles = StyleSheet.create({
     width:'100%',
     height:80,
     backgroundColor:'rgba(0,0,0,0.3)',
+  },
+
+  tarefaSingle:{
+    marginTop:30,
+    width:'100%',
+    borderBottomWidth:1,
+    borderBottomColor:'black',
+    flexDirection:'row',
+    paddingBottom:10,
+    paddingHorizontal:10
   }
 
 });
