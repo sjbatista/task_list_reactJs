@@ -35,8 +35,15 @@ export default function App() {
   }
 
   deleteTask = (id) => {
-    alert('Id: '+ id);
     //delete the task with the given 'id' from the array/state
+    let newTasks = tasks.filter(function(val){
+      return val.id != id;
+    });
+    
+    setTask(newTasks);
+
+    alert('task deleted successfully!');
+
   }
   
   return (
