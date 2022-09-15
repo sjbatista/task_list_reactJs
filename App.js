@@ -2,20 +2,31 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
+import React, { useState } from 'react';
 import {
   useFonts,
   BalsamiqSans_400Regular,
-  BalsamiqSans_400Regular_Italic,
-  BalsamiqSans_700Bold,
   BalsamiqSans_700Bold_Italic,
 } from '@expo-google-fonts/balsamiq-sans';
 
 export default function App() {
   
+  const [tasks, setTask] = useState([
+    {
+      id:1,
+      task: 'My task 1',
+    },
+    {
+      id:2,
+      task: 'My task 2',
+    },
+
+  ]);
+
+  const image = require('./resources/bg.jpg');
+
   let [fontsLoaded] = useFonts({
     BalsamiqSans_400Regular,
-    BalsamiqSans_400Regular_Italic,
-    BalsamiqSans_700Bold,
     BalsamiqSans_700Bold_Italic,
   });
 
@@ -23,7 +34,10 @@ export default function App() {
     return <AppLoading />;
   }
 
-  const image = require('./resources/bg.jpg');
+  deleteTask = (id) => {
+    alert('Id: '+ id);
+    //delete the task with the given 'id' from the array/state
+  }
   
   return (
     
@@ -34,29 +48,25 @@ export default function App() {
     <View style={styles.coverView}><Text style={styles.textHeader}>Task List</Text></View>   
     </ImageBackground> 
 
-    <View style={styles.tarefaSingle}>
+    {tasks.map(function(val){
+      
+      return(
+
+      <View style={styles.tarefaSingle}>
 
       <View style={{flex:1, width: '100%', paddingEnd:10}}>
-        <Text style={styles.textBody}> My first task 14/09 </Text>
+        <Text style={styles.textBody}>{val.task}</Text>
       </View>
 
       <View>
-        <TouchableOpacity><AntDesign name="minuscircleo" size={24} color="black" /></TouchableOpacity>
+        <TouchableOpacity onPress={()=> deleteTask(val.id)}><AntDesign name="minuscircleo" size={24} color="black" /></TouchableOpacity>
       </View>
 
     </View>
 
-    <View style={styles.tarefaSingle}>
-
-      <View style={{flex:1, width: '100%', paddingEnd:10}}>
-        <Text style={styles.textBody}> My first task 14/09 </Text>
-      </View>
-
-      <View>
-        <TouchableOpacity><AntDesign name="minuscircleo" size={24} color="black" /></TouchableOpacity>
-      </View>
-
-    </View>
+    );})
+    
+    }
      
   </ScrollView>
 
