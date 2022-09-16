@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ImageBackground, TouchableOpacity, ScrollView, Modal, TouchableHighlight, TextInput, LogBox } from 'react-native';
-import { AntDesign, addfile } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
 import React, { useState } from 'react';
 import {
@@ -27,6 +27,9 @@ export default function App() {
     },
 
   ]);
+
+
+  const[currentTask, setCurrentTask] = useState('');
 
   // Our Modal and Modal states
   const [modal, setModal] = useState(true);
@@ -57,6 +60,24 @@ export default function App() {
 
   }
   
+  
+  addTask = () => {
+    setModal(!modal);
+    alert('Task saved successfully!');
+    let id = 0;
+
+    if(tasks.length > 0){
+      id = tasks[tasks.length-1].id + 1;
+      
+      let task = {id:id,task:currentTask};
+      setTask([...tasks,task]);
+    }else if(tasks.length = 0){
+      id = 1;
+      let task = {id:id,task:currentTask};
+      setTask([...tasks,task]);
+    }
+  }
+
   // Main return, where everything happens
   return (
     
@@ -72,9 +93,9 @@ export default function App() {
         >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <TextInput autoFocus={true}></TextInput>
+            <TextInput onChangeText={text => setCurrentTask(text)} autoFocus={true}></TextInput>
 
-            <TouchableHighlight style={{...styles.openButton, backgroundColor: "#2196F3"}} onPress={() => {setModal(!modal);}}>
+            <TouchableHighlight style={{...styles.openButton, backgroundColor: "#2196F3"}} onPress={() => addTask()}>
               <Text style={styles.textStyle}>Add task</Text>
             </TouchableHighlight>
           </View>
