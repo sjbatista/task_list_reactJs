@@ -2,7 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ImageBackground, TouchableOpacity, ScrollView, Modal, TouchableHighlight, TextInput, LogBox } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { AsyncStorage } from 'react-native';
 import {
   useFonts,
   BalsamiqSans_400Regular,
@@ -16,18 +17,7 @@ export default function App() {
   
 
   // Our tasks and task states
-  const [tasks, setTask] = useState([
-    {
-      id:1,
-      task: 'My task 1',
-    },
-    {
-      id:2,
-      task: 'My task 2',
-    },
-
-  ]);
-
+  const [tasks, setTask] = useState([]);
 
   const[currentTask, setCurrentTask] = useState('');
 
@@ -36,6 +26,23 @@ export default function App() {
 
   // Our background image
   const image = require('./resources/bg.jpg');
+
+  useEffect(() => {
+    (async () => {
+      try{
+        let currentTask = await AsyncStorage.getItem('tasks');
+        if(currentTask == null)
+           setTask([]);
+        else
+           setTask(JSON.parse(currentTask));
+      }catch(error){
+
+      }
+
+    })();
+
+  },[])
+
 
   // Load text fonts to the project
   let [fontsLoaded] = useFonts({
@@ -49,6 +56,7 @@ export default function App() {
 
   //delete the task with the given 'id' from the array/state
   deleteTask = (id) => {
+    alert(id+' task deleted successfully!');
     
     let newTasks = tasks.filter(function(val){
       return val.id != id;
@@ -56,7 +64,15 @@ export default function App() {
     
     setTask(newTasks);
 
-    alert('task deleted successfully!');
+    (async () => {
+      try{
+        await AsyncStorage.setItem('tasks', JSON.stringify(newTasks));
+        console.log('chamado');
+      }catch(error){
+
+      }
+
+    })();
 
   }
   
@@ -64,18 +80,24 @@ export default function App() {
   addTask = () => {
     setModal(!modal);
     alert('Task saved successfully!');
+
     let id = 0;
 
     if(tasks.length > 0){
       id = tasks[tasks.length-1].id + 1;
-      
-      let task = {id:id,task:currentTask};
-      setTask([...tasks,task]);
-    }else if(tasks.length = 0){
-      id = 1;
-      let task = {id:id,task:currentTask};
-      setTask([...tasks,task]);
     }
+      let task = {id:id,task:currentTask};
+
+      setTask([...tasks,task]);
+    
+      (async() => {
+        try{
+          await AsyncStorage.setItem('tasks',JSON.stringify([...tasks,task]));
+        }catch(error){
+
+        }
+      })();
+
   }
 
   // Main return, where everything happens
